@@ -36,7 +36,7 @@ function ytStateChange(change) {
 }
 function gifit(start, dur) {
 	var payload = {
-		"url":"https://www.youtube.com/watch?v=2sSRZsgRy8U",
+		"url":$('#url').val(),
 		"start":start,
 		"dur": dur,
 	}
@@ -113,7 +113,7 @@ function init() {
 	var params = { allowScriptAccess: "always", wmode: "transparent" };
 	var atts = { id: "myytplayer" };
 	swfobject.embedSWF(
-		"http://www.youtube.com/v/2sSRZsgRy8U?enablejsapi=1&playerapiid=ytplayer&version=3&fs=0&iv_load_policy=3&showinfo=0",
+		"http://www.youtube.com/v/ihpG_NJ_T1g?enablejsapi=1&playerapiid=ytplayer&version=3&fs=0&iv_load_policy=3&showinfo=0",
 		"ytapiplayer",
 		"425",
 		"300",
