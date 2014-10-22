@@ -4,16 +4,13 @@
 var vid_length = 0;
 var ready = false;
 function onYouTubePlayerReady(playerId) {
-	console.log(playerId);
 	ytplayer = document.getElementById("myytplayer");
-	console.log(ytplayer)
 	ytplayer.addEventListener("onStateChange", "ytStateChange");
 	ytplayer.mute();
 	ready = true;
 }
 function ytStateChange(change) {
 	ytplayer = document.getElementById("myytplayer");
-	console.log("change: " +change + ". vid_length: " + vid_length + ". state: " + change)
 	if (vid_length == 0 && change == -1) {
 		vid_length = ytplayer.getDuration()
 		new DoubleSlider("slider_horizontal", {
@@ -22,7 +19,6 @@ function ytStateChange(change) {
 			onChange: function(firstValue, secondValue) {
 				ytplayer = document.getElementById("myytplayer")
 				if (ready && document.id('firstValueH').value != firstValue) {
-					console.log("totally updating: first: " + firstValue + " current " + document.id('firstValueH').value )
 					ytplayer.seekTo(firstValue, true);
 				}
 				document.id('firstValueH').set('value', firstValue);
@@ -55,13 +51,19 @@ function gifit(start, dur) {
 				$.get(
 					"http://97.107.141.47:8080/gifs/" + data.id,
 					function(d) {
+						// workaround for dumb api response
 						if (typeof(d) != "object") {
 							clearInterval(interval)
 							$("#answer").html("")
 							$("#answer").append("<img src=\"" + "http://97.107.141.47:8080/gifs/" + data.id + "\">")
 						} else {
-							if (oldanswer != d.status) {
+							// it's real json
+							if (d.hasOwnProperty('status') && (oldanswer != d.status)) {
 								$("#answer").html(String(d.status))
+								// this is bad too
+								if (d.status.match("^failed at")) {
+									clearInterval(interval);
+								}
 								oldanswer = d.status
 							} else {
 								$("#answer").append(".")
@@ -110,7 +112,7 @@ function updateCoords(c) {
 	$('#h').val(c.h);
 }
 function init() {
-	var params = { allowScriptAccess: "always", wmode: "transparent" };
+	var params = { allowScriptAccess: "always" };
 	var atts = { id: "myytplayer" };
 	swfobject.embedSWF(
 		"http://www.youtube.com/v/ihpG_NJ_T1g?enablejsapi=1&playerapiid=ytplayer&version=3&fs=0&iv_load_policy=3&showinfo=0",
@@ -127,9 +129,10 @@ function init() {
 		gifit(document.id('firstValueH').value, document.id('secondValueH').value - document.id('firstValueH').value);
 	}
 	document.getElementById('cropit').onclick = function(){cropit()}
+
 	$('#url').on('input', function(){
-		//https://www.youtube.com/watch?v=dgKGixi8bp8
 		var input = $(this)
+		// lazy
 		var re = /^https:\/\/www\.youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})$/;
 		var is_legit = re.exec(input.val());
 		if (is_legit) {
@@ -137,7 +140,7 @@ function init() {
 			swfobject.removeSWF("myytplayer");
 			$("#holder").after('<div id="ytapiplayer"></div>');
 			swfobject.embedSWF(
-				"http://www.youtube.com/v/" + is_legit[1] + "?enablejsapi=1&playerapiid=ytplayer&version=3&fs=0&iv_load_policy=3&showinfo=0",
+				"http://www.youtube.com/v/" + is_legit[1] + "?enablejsapi=1&playerapiid=ytplayer&version=3&fs=0&iv_load_policy=3&showinfo=0&rel=1",
 				"ytapiplayer",
 				"425",
 				"300",
