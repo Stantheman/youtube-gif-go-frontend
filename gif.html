@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>gif</title>
+		<title>gifting</title>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.Jcrop.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
@@ -20,7 +20,8 @@
 	<body onload=init()>
 		<div class = "container">
 			<div class="page-title">
-				<h1>gif shit</h1>
+				<h1>peanut butter</h1>
+				<p class="lead">Paste youtube URL, turn into GIF</p>
 				<hr/>
 			</div>
 			<div class="row">
@@ -41,12 +42,13 @@
 							<div></div>
 						</div>
 						<br/>
-						<input type="text" id="firstValueH">
-						<input type="text" id="secondValueH">
+						<label for="firstValueH">Start</label><input type="text" id="firstValueH" size=4>
+						<label for="secondValueH">End</label><input type="text" id="secondValueH" size=4>
+						<center><label>drag the sliders</label></center>
 					</div>
 					<div>
+						<input type="button" value="crop it?" id="cropit">
 						<input type="button" value="gif it" id="gifit">
-						<input type="button" value="crop it" id="cropit">
 						<input type="hidden" name="x" id="x">
 						<input type="hidden" name="y" id="y">
 						<input type="hidden" name="w" id="w">
