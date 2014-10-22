@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>gif</title>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.Jcrop.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/mootools/1.5.0/mootools-core-full-compat.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/mootools-more/1.5.0/mootools-more.js"></script>
+		<script src="js/html2canvas.js"></script>
+		<script src="js/DoubleSlider.js"></script>
+		<script src="js/gif.js"></script>
+
+		<link rel="stylesheet" href="css/jquery.Jcrop.css" type="text/css" />
+		<link rel="stylesheet" href="css/main.css" type="text/css" />
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+
+	<body onload=init()>
+		<div class = "container">
+			<div class="page-title">
+				<h1>gif shit</h1>
+				<hr/>
+			</div>
+<!-- 		<form action="http://97.107.141.47:8080/gifs" method="POST">
+				URL: <input width=100 type="text" name="url"><br/>
+				<input type="submit" value="Submit">
+			</form> -->
+			<div class="row">
+				<div class="col-sm-3 col-md-6 col-lg-6">
+					<div id="holder"></div>
+					<div id="ytapiplayer">
+						You need Flash player 8+ and JavaScript enabled to view this video.
+					</div>
+					<br/>
+					<br/>
+			 		<div class="example">
+						<div id="slider_horizontal">
+							<div></div>
+							<div></div>
+						</div>
+						<br/>
+						<input type="text" id="firstValueH">
+						<input type="text" id="secondValueH">
+					</div>
+					<div>
+						<input type="button" value="gif it" id="gifit">
+						<input type="button" value="crop it" id="cropit">
+					</div>
+				</div>
+				<div class="col-sm-9 col-md-6 col-lg-6">
+					<div id="answer"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
