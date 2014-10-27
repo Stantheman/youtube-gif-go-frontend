@@ -3,15 +3,7 @@
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>gifting</title>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/jquery.Jcrop.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/mootools/1.5.0/mootools-core-full-compat.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/mootools-more/1.5.0/mootools-more.js"></script>
-		<script src="js/html2canvas.js"></script>
-		<script src="js/DoubleSlider.js"></script>
-		<script src="js/gif.js"></script>
-
 		<link rel="stylesheet" href="css/jquery.Jcrop.css" type="text/css" />
 		<link rel="stylesheet" href="css/main.css" type="text/css" />
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
@@ -30,12 +22,19 @@
 					<div id="ytapiplayer">
 						You need Flash player 8+ and JavaScript enabled to view this video.
 					</div>
-					<br/>
-					<br/>
-					<div>
-						<input type="text" placeholder="youtube url" id="url" size=56 value="https://www.youtube.com/watch?v=ihpG_NJ_T1g">
-						<span class="error">nah</span>
+				</div>
+				<div class="col-sm-9 col-md-6 col-lg-6">
+					<div id="answer">
+						<div id="resp"></div>
+						<div id="gfybutton"></div>
+						<div id="gfycat"></div>
 					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm3 col-md-6 col-lg-6">
+					<input type="text" placeholder="youtube url" id="url" size=56 value="https://www.youtube.com/watch?v=7QLSRMoKKS0">
+					<span class="error">nah</span>
 			 		<div class="example">
 						<div id="slider_horizontal">
 							<div></div>
@@ -55,10 +54,20 @@
 						<input type="hidden" name="h" id="h">
 					</div>
 				</div>
-				<div class="col-sm-9 col-md-6 col-lg-6">
-					<div id="answer"></div>
-				</div>
 			</div>
 		</div>
+		<div class="footer">
+			<div class="container">
+				<p>
+				Made with <a href="http://getbootstrap.com/">Bootstrap</a>, <a href="http://jquery.com/">jQuery</a>, <a href="http://mootools.net/forge/p/doubleslider">DoubleSlider</a>, <a href="http://deepliquid.com/content/Jcrop.html">Jcrop</a> and the <a href="https://developers.google.com/youtube/js_api_reference">Youtube JS API</a>. Created by <a href="https://www.schwertly.com">Stan Schwertly</a>, using <a href="https://github.com/Stantheman/youtube-gif-go/Youtube-Gif-Go">Youtube-Gif-Go</a>
+				</p>
+			</div>
+		</div>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.Jcrop.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/mootools/1.5.0/mootools-core-full-compat.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/mootools-more/1.5.0/mootools-more.js"></script>
+		<script src="js/DoubleSlider.js"></script>
+		<script src="js/gif.js"></script>
 	</body>
 </html>
