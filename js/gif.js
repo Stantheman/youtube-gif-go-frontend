@@ -174,8 +174,8 @@ function makeSWF(id) {
       id +
       '?enablejsapi=1&playerapiid=ytplayer&version=3&fs=0&iv_load_policy=3&showinfo=0&rel=0',
     'ytapiplayer',
-    '425',
-    '300',
+    '480',
+    '360',
     '8',
     null,
     null,
