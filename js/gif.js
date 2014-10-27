@@ -1,7 +1,7 @@
 /*
 * Youtube stuff
 */
-'use strict';
+//'use strict';
 var vidLength = 0;
 var ready = false;
 
@@ -37,6 +37,9 @@ function ytStateChange(change) {
 function createGif(data) {
   var oldanswer = '',
     ansdiv = $('#answer'),
+    resp = ansdiv.find('#resp').empty(),
+    button = ansdiv.find('#gfybutton').empty(),
+    gfycat = ansdiv.find('#gfycat').empty(),
     giflink = '97.107.141.47:8080/gifs/' + data.id,
     // make synchronous
     interval = setInterval(function () {
@@ -46,40 +49,50 @@ function createGif(data) {
           // workaround for dumb api response
           if (typeof d !== 'object') {
             clearInterval(interval);
+            resp.empty()
+            resp.append($('<img/>', {'src': 'http://' + giflink}));
+            resp.append('<br/>');
             // make gfycat button
-            $('<button/>', {'id': 'gfycat', 'value': 'gimme gfycat' })
-              // with onclick action
-              .on('click', function () {
-                // where we hit up the gfy api
-                $.get('http://upload.gfycat.com/transcode?fetchUrl=' + giflink,
-                  // and respond by adding a label/link combo to the page
-                  function (gcat) {
-                    $('<label/>', {'value': 'gfycat:'})
-                      .append(
-                        $('<a/>', {'href': 'http://gfycat.com/' + gcat.gfyName})
-                      )
-                      .appendTo(ansdiv);
+            button.append(
+              $('<button/>',
+                {
+                  'id': 'gfycat', 
+                  'text': 'gimme gfycat',
+                  // with onclick action
+                  on: {
+                    click: function () {
+                      // where we hit up the gfy api
+                      $.get('http://upload.gfycat.com/transcode?fetchUrl=' + giflink,
+                        // and respond by adding a label/link combo to the page
+                        function (gcat) {
+                          gfycat.append([
+                            $('<label/>', {'value': 'gfycat:'}),
+                            $('<a/>', {
+                              'href': 'http://gfycat.com/' + gcat.gfyName
+                            })
+                          ]);
+                        }
+                      );
+                    }
                   }
-                );
-              })
-              .appendTo(ansdiv);
-
-            ansdiv.appendTo($('<img/>'), {'src': 'http://' + giflink});
+                }
+              )
+            );
+            return;
           }
           // it's real json
           if (d.hasOwnProperty('status') && (oldanswer !== d.status)) {
-            ansdiv.html(String(d.status));
+            resp.text(String(d.status));
             // this is bad too
             if (d.status.match('^failed at')) {
               clearInterval(interval);
             }
             oldanswer = d.status;
           } else {
-            ansdiv.append('.');
+            resp.text(resp.text() + '.');
           }
         }
-      );
-    }, 1000);
+      )}, 1000);
 }
 
 function gifit(start, dur) {
@@ -101,6 +114,11 @@ function gifit(start, dur) {
     'http://97.107.141.47:8080/gifs',
     payload,
     createGif
+  )
+    .fail(function(xhr, status, errorThrown) {
+      console.log(xhr, status, errorThrown)
+      $('#resp').text(String(errorThrown));
+    }
   );
 }
 
@@ -167,7 +185,7 @@ function makeSWF(id) {
 
 function init() {
   // default video to display
-  makeSWF('ihpG_NJ_T1g');
+  makeSWF('7QLSRMoKKS0');
   // actually sends the request
   document.getElementById('gifit').onclick = function () {
     gifit(document.id('firstValueH').value, document.id('secondValueH').value - document.id('firstValueH').value);
