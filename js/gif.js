@@ -208,4 +208,13 @@ function init() {
       $('span', input.parent()).removeClass('error').addClass('error_show');
     }
   });
+
+  // loop video between toggles
+  setInterval(function() {
+    ytplayer = document.getElementById('myytplayer');
+    if (ytplayer.getCurrentTime() > $('#secondValueH').val()) {
+      ytplayer.seekTo($('#firstValueH').val(), true);
+    }
+  }, 500);
+
 }
