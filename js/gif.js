@@ -53,6 +53,7 @@ function createGif(data) {
             resp.append($('<img/>', {'src': 'http://' + giflink}));
             resp.append('<br/>');
             // make gfycat button
+            button.empty()
             button.append(
               $('<button/>',
                 {
