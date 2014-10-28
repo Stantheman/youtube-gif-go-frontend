@@ -5,11 +5,14 @@
 var vidLength = 0;
 var ready = false;
 
+/*
+* generic time helpers
+*/
 function secsToHHMMSS(seconds) {
   // http://stackoverflow.com/a/1322830
-  var hours = parseInt( seconds / 3600 ) % 24;
-  var minutes = parseInt( seconds / 60 ) % 60;
-  var seconds = seconds % 60;
+  var hours = parseInt( seconds / 3600 ) % 24,
+      minutes = parseInt( seconds / 60 ) % 60,
+      seconds = seconds % 60;
 
   var result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
   return result;
@@ -17,25 +20,21 @@ function secsToHHMMSS(seconds) {
 
 function HHMMSSToSecs(hhmmss) {
   stuff = hhmmss.split(":");
-  var hours = parseInt( stuff[0] * 3600 );
-  var minutes = parseInt( stuff[1] * 60 );
-  var seconds = parseInt(stuff[2]);
+  var hours = parseInt( stuff[0] * 3600 ),
+      minutes = parseInt( stuff[1] * 60 ),
+      seconds = parseInt(stuff[2]);
 
   return hours+minutes+seconds;
 }
 
+/*
+* youtube specific methods
+*/
 function onYouTubePlayerReady() {
   var ytplayer = document.getElementById('myytplayer');
   ytplayer.addEventListener('onStateChange', 'ytStateChange');
   ytplayer.mute();
   ready = true;
-  // loop video between toggles
-  setInterval(function() {
-    ytplayer = document.getElementById('myytplayer');
-    if (ytplayer.getCurrentTime() > $('#secondValueH').data("secs")) {
-      ytplayer.seekTo($('#firstValueH').data("secs"), true);
-    }
-  }, 500);
 }
 
 function ytStateChange(change) {
@@ -163,6 +162,7 @@ function updateCoords(c) {
   $('#h').val(c.h);
 }
 
+// cropIt helps set the z-index for the jcrop div and toggles cropping
 function cropit() {
    /*jshint validthis:true */
   var _this = this,
@@ -228,7 +228,11 @@ function init() {
     }
   );
   // toggles cropping
-  document.getElementById('cropit').onclick = function () {cropit(); };
+  $('#cropit').on(
+    'click', function () {
+      cropit();
+    }
+  );
   // validates the URL param and updates the swfobject
   $('#url').on('input', function () {
     var input = $(this),
@@ -244,5 +248,18 @@ function init() {
       $('span', input.parent()).removeClass('error').addClass('error_show');
     }
   });
+  // loop video between toggles
+  setInterval(function() {
+    ytplayer = document.getElementById('myytplayer');
+    if (typeof ytplayer.getPlayerState !== 'function') {
+      return;
+    }
+    if (ytplayer.getPlayerState() === -1) {
+      return;
+    }
+    if (ytplayer.getCurrentTime() > $('#secondValueH').data("secs")) {
+      ytplayer.seekTo($('#firstValueH').data("secs"), true);
+    }
+  }, 500);
 
 }
