@@ -59,72 +59,79 @@ function ytStateChange(change) {
   }
 }
 
+/*
+* gif methods
+*/
 function createGif(data) {
   var oldanswer = '',
     ansdiv = $('#answer'),
     resp = ansdiv.find('#resp').empty(),
     button = $('#gfybutton').empty(),
-    gfycat = $('#gfycat').empty(),
-    giflink = '97.107.141.47:8080/gifs/' + data.id,
-    // make synchronous
-    interval = setInterval(function () {
-      $.get(
-        'http://' + giflink,
-        function (d) {
-          // workaround for dumb api response
-          if (typeof d !== 'object') {
-            clearInterval(interval);
-            resp.empty()
-            resp.append($('<img/>', {'src': 'http://' + giflink}));
-            resp.append('<br/>');
-            // make gfycat button
-            button.empty()
-            button.append(
-              $('<button/>',
-                {
-                  'id': 'gfycat', 
-                  'text': 'gimme gfycat',
-                  // with onclick action
-                  on: {
-                    click: function () {
-                      fakespin = setInterval(function(){
-                        gfycat.append(".");
-                      }, 200);
-                      // where we hit up the gfy api
-                      $.get('http://upload.gfycat.com/transcode?fetchUrl=' + giflink,
-                        // and respond by adding a label/link combo to the page
-                        function (gcat) {
-                          clearInterval(fakespin);
-                          gfycat.empty();
-                          gfycat.append(
-                            $('<a/>', {
-                              'href': 'http://gfycat.com/' + gcat.gfyName,
-                              text: 'http://gfycat.com/' + gcat.gfyName
-                            })
-                          );
-                        }
-                      );
-                    }
+    gfycat = $('#gfycat').empty();
+
+  var endpoint = '97.107.141.47:8080/',
+    giflink = endpoint + 'gifs/' + data.id,
+    joblink = endpoint + 'jobs/' + data.id;
+
+  // check the jobs url until the status is active
+  var interval = setInterval(function () {
+    $.get(
+      'http://' + joblink,
+      function (d) {
+        if (d.status === 'available') {
+          clearInterval(interval);
+          resp.empty()
+          resp.append($('<img/>', {'src': 'http://' + giflink}));
+          resp.append('<br/>');
+          // make gfycat button
+          button.empty()
+          button.append(
+            $('<button/>',
+              {
+                'id': 'gfycat',
+                'text': 'gimme gfycat',
+                // with onclick action
+                on: {
+                  click: function () {
+                    fakespin = setInterval(function(){
+                      gfycat.append(".");
+                    }, 200);
+                    // where we hit up the gfy api
+                    $.get('http://upload.gfycat.com/transcode?fetchUrl=' + giflink,
+                      // and respond by adding a label/link combo to the page
+                      function (gcat) {
+                        clearInterval(fakespin);
+                        gfycat.empty();
+                        gfycat.append(
+                          $('<a/>', {
+                            'href': 'http://gfycat.com/' + gcat.gfyName,
+                            text: 'http://gfycat.com/' + gcat.gfyName
+                          })
+                        );
+                      }
+                    );
                   }
                 }
-              )
-            );
-            $('#gifit').prop("disabled", false);
-            return;
-          }
-          // it's real json
-          if (d.hasOwnProperty('status') && (oldanswer !== d.status)) {
-            resp.text(String(d.status));
-            // this is bad too
-            if (d.status.match('^failed at')) {
-              clearInterval(interval);
-            }
-            oldanswer = d.status;
-          } else {
-            resp.text(resp.text() + '.');
-          }
+              }
+            )
+          );
+          $('#gifit').prop("disabled", false);
+          return;
         }
-      )}, 1000);
+        if (d.status === 'failed') {
+          console.log(d);
+          clearInterval(interval);
+          resp.text(String(d.status) + ": " + String(d.description));
+          return;
+        }
+        if (oldanswer !== d.status) {
+          resp.text(String(d.status));
+          oldanswer = d.status;
+        } else {
+          resp.text(resp.text() + '.');
+        }
+      }
+    )}, 1000);
 }
 
 function gifit(start, dur) {
