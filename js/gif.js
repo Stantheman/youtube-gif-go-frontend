@@ -110,6 +110,7 @@ function createGif(data) {
                 }
               )
             );
+            $('#gifit').prop("disabled", false);
             return;
           }
           // it's real json
@@ -150,6 +151,7 @@ function gifit(start, dur) {
     .fail(function(xhr, status, errorThrown) {
       console.log(xhr, status, errorThrown)
       $('#resp').text(String(errorThrown));
+      $('#gifit').prop("disabled", false);
     }
   );
 }
@@ -219,9 +221,12 @@ function init() {
   // default video to display
   makeSWF('7QLSRMoKKS0');
   // actually sends the request
-  document.getElementById('gifit').onclick = function () {
-    gifit($('#firstValueH').data("secs"), $('#secondValueH').data("secs") - $('#firstValueH').data("secs"));
-  };
+  $('#gifit').on(
+    'click', function () {
+      $(this).prop("disabled", true);
+      gifit($('#firstValueH').data("secs"), $('#secondValueH').data("secs") - $('#firstValueH').data("secs"));
+    }
+  );
   // toggles cropping
   document.getElementById('cropit').onclick = function () {cropit(); };
   // validates the URL param and updates the swfobject
