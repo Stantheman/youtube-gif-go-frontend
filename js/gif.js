@@ -29,6 +29,13 @@ function onYouTubePlayerReady() {
   ytplayer.addEventListener('onStateChange', 'ytStateChange');
   ytplayer.mute();
   ready = true;
+  // loop video between toggles
+  setInterval(function() {
+    ytplayer = document.getElementById('myytplayer');
+    if (ytplayer.getCurrentTime() > $('#secondValueH').data("secs")) {
+      ytplayer.seekTo($('#firstValueH').data("secs"), true);
+    }
+  }, 500);
 }
 
 function ytStateChange(change) {
@@ -232,13 +239,5 @@ function init() {
       $('span', input.parent()).removeClass('error').addClass('error_show');
     }
   });
-
-  // loop video between toggles
-  setInterval(function() {
-    ytplayer = document.getElementById('myytplayer');
-    if (ytplayer.getCurrentTime() > $('#secondValueH').data("secs")) {
-      ytplayer.seekTo($('#firstValueH').data("secs"), true);
-    }
-  }, 500);
 
 }
