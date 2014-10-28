@@ -5,7 +5,24 @@
 var vidLength = 0;
 var ready = false;
 
-// function parameter are optional
+function secsToHHMMSS(seconds) {
+  // http://stackoverflow.com/a/1322830
+  var hours = parseInt( seconds / 3600 ) % 24;
+  var minutes = parseInt( seconds / 60 ) % 60;
+  var seconds = seconds % 60;
+
+  var result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+  return result;
+}
+
+function HHMMSSToSecs(hhmmss) {
+  stuff = hhmmss.split(":");
+  var hours = parseInt( stuff[0] * 3600 );
+  var minutes = parseInt( stuff[1] * 60 );
+  var seconds = parseInt(stuff[2]);
+
+  return hours+minutes+seconds;
+}
 
 function onYouTubePlayerReady() {
   var ytplayer = document.getElementById('myytplayer');
@@ -21,11 +38,13 @@ function ytStateChange(change) {
     new DoubleSlider('slider_horizontal', {
       onChange: function (firstValue, secondValue) {
         ytplayer = document.getElementById('myytplayer');
-        if (ready && document.id('firstValueH').value !== firstValue) {
+        var first = $('#firstValueH'),
+            second = $('#secondValueH');
+        if (ready && first.val() !== firstValue) {
           ytplayer.seekTo(firstValue, true);
         }
-        document.id('firstValueH').set('value', firstValue);
-        document.id('secondValueH').set('value', secondValue);
+        first.val(secsToHHMMSS(firstValue)).data("secs", firstValue);
+        second.val(secsToHHMMSS(secondValue)).data("secs", secondValue);
       },
       range: [0, vidLength],
       start: [0, vidLength],
@@ -194,7 +213,7 @@ function init() {
   makeSWF('7QLSRMoKKS0');
   // actually sends the request
   document.getElementById('gifit').onclick = function () {
-    gifit(document.id('firstValueH').value, document.id('secondValueH').value - document.id('firstValueH').value);
+    gifit($('#firstValueH').data("secs"), $('#secondValueH').data("secs") - $('#firstValueH').data("secs"));
   };
   // toggles cropping
   document.getElementById('cropit').onclick = function () {cropit(); };
@@ -217,8 +236,8 @@ function init() {
   // loop video between toggles
   setInterval(function() {
     ytplayer = document.getElementById('myytplayer');
-    if (ytplayer.getCurrentTime() > $('#secondValueH').val()) {
-      ytplayer.seekTo($('#firstValueH').val(), true);
+    if (ytplayer.getCurrentTime() > $('#secondValueH').data("secs")) {
+      ytplayer.seekTo($('#firstValueH').data("secs"), true);
     }
   }, 500);
 
