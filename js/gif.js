@@ -38,8 +38,8 @@ function createGif(data) {
   var oldanswer = '',
     ansdiv = $('#answer'),
     resp = ansdiv.find('#resp').empty(),
-    button = ansdiv.find('#gfybutton').empty(),
-    gfycat = ansdiv.find('#gfycat').empty(),
+    button = $('#gfybutton').empty(),
+    gfycat = $('#gfycat').empty(),
     giflink = '97.107.141.47:8080/gifs/' + data.id,
     // make synchronous
     interval = setInterval(function () {
@@ -62,16 +62,21 @@ function createGif(data) {
                   // with onclick action
                   on: {
                     click: function () {
+                      fakespin = setInterval(function(){
+                        gfycat.append(".");
+                      }, 200);
                       // where we hit up the gfy api
                       $.get('http://upload.gfycat.com/transcode?fetchUrl=' + giflink,
                         // and respond by adding a label/link combo to the page
                         function (gcat) {
-                          gfycat.append([
-                            $('<label/>', {'value': 'gfycat:'}),
+                          clearInterval(fakespin);
+                          gfycat.empty();
+                          gfycat.append(
                             $('<a/>', {
-                              'href': 'http://gfycat.com/' + gcat.gfyName
+                              'href': 'http://gfycat.com/' + gcat.gfyName,
+                              text: 'http://gfycat.com/' + gcat.gfyName
                             })
-                          ]);
+                          );
                         }
                       );
                     }
