@@ -211,20 +211,46 @@ function cropit() {
 
 function makeSWF(id) {
   var params = { allowScriptAccess: 'always' },
-    atts = { id: 'myytplayer' };
+    atts = { id: 'myytplayer' },
+    width = 480,
+    height = 360;
+
+  if (isWidescreen(id)) {
+    height = 270;
+    console.log("is widescreen");
+  }
+
   swfobject.embedSWF(
     'http://www.youtube.com/v/' +
       id +
       '?enablejsapi=1&playerapiid=ytplayer&version=3&fs=0&iv_load_policy=3&showinfo=0&rel=0',
     'ytapiplayer',
-    '480',
-    '360',
+    width,
+    height,
     '8',
     null,
     null,
     params,
     atts
   );
+}
+
+function isWidescreen(id) {
+  var v2url = 'http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc';
+  bits = $.parseJSON($.ajax({
+      type: 'GET',
+      url: v2url,
+      dataType: 'json',
+      success: function() { },
+      data: {},
+      async: false
+  }).responseText);
+
+  if (bits.data.aspectRatio !== undefined) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function init() {
@@ -271,5 +297,4 @@ function init() {
       ytplayer.seekTo($('#firstValueH').data("secs"), true);
     }
   }, 500);
-
 }
