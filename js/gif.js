@@ -139,7 +139,9 @@ function gifit(start, dur) {
   var payload = {
     'url': $('#url').val(),
     'start': start,
-    'dur': dur
+    'dur': dur,
+    'vw': $('#myytplayer').width(),
+    'vh': $('#myytplayer').height()
   };
   if ($('#x').val() !== '' && $('#cropit').val() !== 'crop it?') {
     // extend
