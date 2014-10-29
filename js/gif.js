@@ -122,6 +122,7 @@ function createGif(data) {
           console.log(d);
           clearInterval(interval);
           resp.text(String(d.status) + ": " + String(d.description));
+          $('#gifit').prop("disabled", false);
           return;
         }
         if (oldanswer !== d.status) {
