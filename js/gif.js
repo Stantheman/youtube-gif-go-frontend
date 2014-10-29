@@ -180,33 +180,57 @@ function cropit() {
     ytplayer = document.getElementById('myytplayer');
 
   /*jshint validthis:true */
+  // flipping on cropping
   if (!this.jcropEl) {
+    // set the holder div to the player size
     el.width(ytplayer.width);
     el.height(ytplayer.height);
-    el.Jcrop({
-      onSelect: updateCoords
-    }, function () {
-      var jcropEl = _this.jcropEl = el.parent();
-      _this.jcropping = true;
-      jcropEl.css({
-        'background-color': 'transparent',
-        position: 'absolute'
-      });
-    });
+    // set up jcrop
+    el.Jcrop(
+      {
+        onSelect: updateCoords
+      }, function () {
+        // jcropElement and _this.jcropElement are all equal to holder's parent,
+        // which is now jcrop-holder, because jcrop changes everything
+        var jcropEl = _this.jcropEl = el.parent();
+        _this.jcropping = true;
+        // set the whole row to transparent + abs
+        jcropEl.css({
+          'background-color': 'transparent',
+          position: 'absolute'
+        });
+      }
+    );
     $('#cropit').val('stop it');
   } else if (!this.jcropping) {
+    // if we pressed the button and we're not cropping, start to crop
+    // do this by sending the jcrop div to the front
     this.jcropEl.css({
       'z-index': 600
     });
     this.jcropping = true;
     $('#cropit').val('stop it');
   } else {
+    // otherwise we're cropping, and we want it off, send jcrop to the background
     this.jcropEl.css({
       'z-index': -10
     });
     this.jcropping = false;
     $('#cropit').val('crop it?');
   }
+}
+
+// jcrop.destroy kills too many divs, jcrop in general modifies a lot
+// just set things back to how they used to be
+function killCrop() {
+  if ($('.jcrop-holder')) {
+    $('.jcrop-holder').replaceWith($('<div/>', {
+      'id': 'holder'
+    }));
+  }
+  this.jcropEl = null;
+  this.jcropping = false;
+  $('#holder').after('<div id="ytapiplayer"></div>');
 }
 
 function makeSWF(id) {
@@ -272,13 +296,15 @@ function init() {
   // validates the URL param and updates the swfobject
   $('#url').on('input', function () {
     var input = $(this),
-      re = /^https:\/\/www\.youtube\.com\/watch\?v=([A-Za-z0-9_\-]{11})$/;
+        re = /^https:\/\/www\.youtube\.com\/watch\?v=([A-Za-z0-9_\-]{11})$/;
     var isLegit = re.exec(input.val());
+
     if (isLegit) {
       $('span', input.parent()).removeClass('error_show').addClass('error');
+      // replace the current swf with the next one
       swfobject.removeSWF('myytplayer');
+      killCrop();
       vidLength = 0;
-      $('#holder').after('<div id="ytapiplayer"></div>');
       makeSWF(isLegit[1]);
     } else {
       $('span', input.parent()).removeClass('error').addClass('error_show');
