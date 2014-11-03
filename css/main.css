@@ -37,7 +37,7 @@ label{
 }
 .example
 {
-	width: 240px;
+	width: 260px;
 	height: 100px;
 	border: 2px solid #C9C9C9;
 	padding: 10px;
@@ -52,7 +52,7 @@ label{
 #slider_horizontal
 {
     position: relative;
-    width: 210px;
+    width: 240px;
     height: 15px;
     background: #C9C9C9;
     margin-bottom: 10px;
