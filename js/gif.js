@@ -4,6 +4,7 @@
 //'use strict';
 var vidLength = 0;
 var ready = false;
+var slider;
 
 /*
 * generic time helpers
@@ -41,7 +42,7 @@ function ytStateChange(change) {
   var ytplayer = document.getElementById('myytplayer');
   if ((vidLength === 0) && (change === -1)) {
     vidLength = ytplayer.getDuration();
-    new DoubleSlider('slider_horizontal', {
+    slider = new DoubleSlider('slider_horizontal', {
       onChange: function (firstValue, secondValue) {
         ytplayer = document.getElementById('myytplayer');
         var first = $('#firstValueH'),
@@ -323,4 +324,19 @@ function init() {
       ytplayer.seekTo($('#firstValueH').data("secs"), true);
     }
   }, 500);
+  // update the slider time fields when changed
+  $(':text').keyup( function() {
+    elem = $(this);
+    var time_re = /^\d{2}:\d{2}:\d{2}$/;
+    real_time = time_re.exec(elem.val());
+    if (!real_time) {
+      return;
+    }
+    // update the secs data val
+    elem.data("secs", HHMMSSToSecs(elem.val()));
+    // update knobs
+    slider.setKnobs($('#firstValueH').data('secs'), $('#secondValueH').data('secs'));
+    // reseek since user probably wants a fresh view
+    ytplayer.seekTo($('#firstValueH').data("secs"), true);
+  });
 }
